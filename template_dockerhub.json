@@ -28,15 +28,15 @@
   "post-processors": [
     [
       {
-        "type": "docker-push",
-        "login_username": "{{user `docker_hub_username`}}",
-        "login_password": "{{user `docker_hub_password`}}",
-        "login": "true"
+        "type": "docker-tag",
+        "repository": "yanzord/packer-lt-node",
+        "tags": ["latest"]
       },
       {
-        "type": "docker-tag",
-        "tags": ["latest"],
-        "repository": "yanzord/packer-lt-node"
+        "type": "docker-push",
+        "login": "true",
+        "login_username": "{{user `docker_hub_username`}}",
+        "login_password": "{{user `docker_hub_password`}}"
       }
     ]
   ]
