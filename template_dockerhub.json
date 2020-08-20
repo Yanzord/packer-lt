@@ -1,0 +1,43 @@
+{
+  "variables": {
+    "docker_hub_username": "",
+    "docker_hub_password": ""
+  },
+  "builders": [
+    {
+      "type": "docker",
+      "image": "ubuntu:18.04",
+      "commit": true,
+      "changes": [
+        "WORKDIR /usr/local",
+        "ENTRYPOINT [\"npm\", \"start\"]"
+      ]
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "script": "scripts/provision_node.sh"
+    },
+    {
+      "type": "file",
+      "source": "node_app/",
+      "destination": "/usr/local"
+    }
+  ],
+  "post-processors": [
+    [
+      {
+        "type": "docker-push",
+        "login_username": "{{user `docker_hub_username`}}",
+        "login_password": "{{user `docker_hub_password`}}",
+        "login": "true"
+      },
+      {
+        "type": "docker-tag",
+        "tags": ["latest"],
+        "repository": "yanzord/packer-lt-node"
+      }
+    ]
+  ]
+}
